@@ -1,122 +1,105 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App(){
+    return (
+        <>
+            <div className='header'>
+                <h1>Ash's Pokémon GYM</h1>
+                <div className="stats-div">
+                    <div className="stats-container">
+                        <h4 className="stat-title">
+                            Pokémon Captured
+                        </h4>
+                        <p className="stat-count bg-yellow">
+                            1   
+                        </p>
+                    </div>
+                    <div className="stats-container">
+                        <h4 className="stat-title">
+                            Trained Pokémon
+                        </h4>
+                        <p className="stat-count bg-blue">
+                            0   
+                        </p>
+                    </div>
+                    <div className="stats-container">
+                        <h4 className="stat-title">
+                            Untrained Pokémon
+                        </h4>
+                        <p className="stat-count bg-cyan">
+                            1   
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+            <div className="pokemon-gym">
+                <h2>Catch Pokémon</h2>
+                <form action="">
+                    <input type="text" placeholder='Pokémon Name'/>
+                    <input type="number" placeholder='Pokémon Level'/>
+                    <input type="text" placeholder='Pokémon Type. Separated by commas (,)'/>
+                    <input type="submit" value="Catch Pokémon" className='btn bg-blue'/>
+                </form>
+                <h2>Pokémon Roster</h2>
+                <div className="pokemon-roster">
+                    <div className="pokemon-card">
+                        <h3 className='pokemon-title'><span className='sNo'>1</span>Pikachu</h3>
+                        <div className="pokemon-stats-div">
+                            <div className='pokemon-stat-container'>
+                                <p className='stat-name'>Level:</p>
+                                <p className='pokemon-level'>51</p>
+                            </div>
+                            <div className='pokemon-stat-container'>
+                                <p className='stat-name'>Type:</p>
+                                <p className='pokemon-type'>Electric</p>
+                            </div>
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn bg-orange">Edit</button>
+                            <button className="btn bg-green">Train</button>
+                            <button className="btn bg-red">Release</button>
+                        </div>
+                    </div>
+                    <div className="pokemon-card">
+                        <h3 className='pokemon-title'><span className='sNo'>2</span>Charmander</h3>
+                        <div className="pokemon-stats-div">
+                            <div className='pokemon-stat-container'>
+                                <p className='stat-name'>Level:</p>
+                                <p className='pokemon-level'>1</p>
+                            </div>
+                            <div className='pokemon-stat-container'>
+                                <p className='stat-name'>Type:</p>
+                                <p className='pokemon-type'>Fire</p>
+                            </div>
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn bg-orange">Edit</button>
+                            <button className="btn bg-green">Train</button>
+                            <button className="btn bg-red">Release</button>
+                        </div>
+                    </div>
+                    <div className="pokemon-card">
+                        <h3 className='pokemon-title'><span className='sNo'>3</span>Froakie</h3>
+                        <div className="pokemon-stats-div">
+                            <div className='pokemon-stat-container'>
+                                <p className='stat-name'>Level:</p>
+                                <p className='pokemon-level'>1</p>
+                            </div>
+                            <div className='pokemon-stat-container'>
+                                <p className='stat-name'>Type:</p>
+                                <p className='pokemon-type'>Water</p>
+                            </div>
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn bg-orange">Edit</button>
+                            <button className="btn bg-green">Train</button>
+                            <button className="btn bg-red">Release</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        </>
+    );
 }
-
-export default App

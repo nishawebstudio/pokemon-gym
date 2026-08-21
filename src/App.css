@@ -20,16 +20,16 @@
 } */
 
 :root{
-    --black: rgba(50,50,50,1);
+    --black: rgba(15,15,15,1);
     --white: rgb(250, 250, 250, 1);
-    --red: rgba(240, 104, 104,1);
+    --red: rgba(255, 140, 140, 1);
     --green: rgba(144, 241, 144,1);
     --blue: rgba(104, 174, 240,1);
     --orange: rgba(247, 165, 98,1);
     --yellow: rgba(246, 207, 87, 1);
     --cyan: rgba(171, 255, 255, 1);
     --magenta: rgb(254, 112, 248, 1);
-    --black-opacity: rgba(50,50,50,0.3);
+    --black-opacity: rgba(15,15,15,0.3);
     --white-opacity: rgb(250, 250, 250, 0.1);
     --red-opacity: rgba(240, 104, 104,0.3);
     --green-opacity: rgba(144, 241, 144,0.3);
@@ -72,11 +72,13 @@ h1 {
 h2{
     font-family: "Mozilla Text", sans-serif;
     font-size: 3.2rem;
+    font-weight: 500;
     color: var(--blue);
+    margin-bottom: 1.5rem;
 }
-h3{
+h3 {
     font-family: "Mozilla Text", sans-serif;
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: 500;
 }
 h4{
@@ -84,32 +86,40 @@ h4{
     font-size: 1.6rem;
     font-weight: 600;
 }
-input[type="text"],input[type="number"] {
+input[type="text"],input[type="number"],input[type="search"],select {
     padding: 0.5rem 1rem;
     border-radius: 0.3rem;
     flex: 1;
+    width: 50%;
+    max-width: 767px;
 }
-form{
+form {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
-    border: 0.1rem solid var(--blue-opacity);
+    /* border: 0.1rem solid var(--blue-opacity); */
     border-radius: 0.3rem;
     padding: 1rem;
-    width: 75%;
+    flex-wrap: balance;
 }
 .bg-red{
     background-color: var(--red);
-    color: var(--white);
+    color: var(--black);
 }
 
 .bg-green{
     background-color: var(--green);
     color: var(--black);
 }
+.bg-green.disabled{
+    background-color: var(--green-opacity);
+    color: var(--white);
+}
 
 .bg-blue{
     background-color: var(--blue);
-    color: var(--yellow);
+    color: var(--black);
 }
 
 .bg-yellow{
@@ -147,6 +157,13 @@ form{
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 500;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn:hover{
+    transform: translateY(-2.5px);
 }
 .btn-group{
     display: flex;
@@ -154,13 +171,29 @@ form{
     align-items: center;
     margin-top: 0.5rem;
 }
+.reg-p{
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+section {
+    min-height: 100vh;
+    padding: 80px 0;
+    display: flex;
+    align-items: center;
+}
 .header {
     background: linear-gradient(45deg, var(--red-opacity), var(--green-opacity), var(--orange-opacity));
-    padding: 0.25rem 1rem;
+    padding: 5rem 1rem 0.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+}
+#catch{
+    padding:1rem;
+}
+#filter{
+    background-color: var(--blue-opacity);
 }
 .stats-div {
 	display: flex;
@@ -184,14 +217,51 @@ form{
 }
 .pokemon-gym {
     padding: 0.25rem 1rem;
+    width: 95%;
+    max-width: 160rem;
+    margin: auto;
 }
-.pokemon-roster{
+nav{
+    position: fixed;
+    width: 100%;
+    background-color: var(--black);
+}
+nav .pokemon-gym{
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+.nav-link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--yellow);
+    padding: 0.5rem 1rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.nav-link:hover{
+    color: var(--blue);
+}
+.nav-link:focus{
+    color: var(--orange);
+}
+.nav-link.active{
+    color: var(--green);
+    border-bottom: 0.1rem solid var(--red);
+}
+.pokemon-roster,.filters-div{
     display: flex;
     gap: 1rem;
     border: 0.1rem solid var(--blue-opacity);
     border-radius: 0.3rem;
     padding: 1rem;
     flex-wrap: wrap;
+}
+.pokemon-roster{
+    padding: 2.5rem 1rem;
 }
 .pokemon-card {
     flex-basis: 15vw;
@@ -227,4 +297,8 @@ p.stat-name {
 p.pokemon-level {
     color: var(--cyan);
     font-weight: 500;
+}
+
+p.pokemon-type {
+    color: var(--green);
 }

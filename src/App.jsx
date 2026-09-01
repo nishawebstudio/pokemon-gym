@@ -8,11 +8,11 @@ import FilterPokemon from './components/FilterPokemon';
 import Navbar from './components/Navbar';
 
 export default function App(){
-    const [pokedex,setPokedex] = useState(()=>{
-        return JSON.parse(localStorage.getItem('pokedex')) || pokemonData;
-    });
-    // let [filteredData,setFilteredData] = useState([...pokedex]);
-    const [appSearchTerm,setAppSearchTerm] = useState("");
+    // const [pokedex,setPokedex] = useState(()=>{
+    //     return JSON.parse(localStorage.getItem('pokedex')) || pokemonData;
+    // });
+    const [pokedex, setPokedex] = useState([]);
+    const [appSearchTerm, setAppSearchTerm] = useState("");
     const [appSortOption,setAppSortOption] = useState("asc-name");
     const [selectedPokemonId,setSelectedPokemonId] = useState(null);
     const [scrollSpy,setScrollSPy] = useState("catch");
@@ -20,15 +20,26 @@ export default function App(){
     const pokemonRoster = pokedex.length;
     const pokemonTrained = pokedex.filter(pokemon => pokemon.level === 100).length;
     const pokemonUntrained = pokedex.filter(pokemon => pokemon.level < 100).length;
+    
+    const getPokemon = async () => {
+        const response = await fetch('http://localhost:5000/api/pokemon');
+        const data = await response.json();
+        // console.log(data);
+        setPokedex(data);
+    }
+
+    useEffect(() => {
+        getPokemon();
+    },[]);
     useEffect(() => 
         {
             localStorage.setItem('pokedex',JSON.stringify(pokedex));
-            console.log(`Effect ran`);
+            // console.log(`Effect ran`);
         },[pokedex]
     );
     useEffect(() => {
         if(selectedPokemonId != null){
-            const currentPokemonEditing = pokedex.find(pokemon => pokemon.id === selectedPokemonId)
+            const currentPokemonEditing = pokedex.find(pokemon => pokemon._id === selectedPokemonId)
             document.title = `Editing Pokémon ${currentPokemonEditing.name}`;
         }
         return (()=>document.title = `Ash's Pokémon Gym`);
@@ -39,7 +50,7 @@ export default function App(){
         const intersectingEntries = entries.filter(entry => entry.isIntersecting).toSorted((a,b)=>a.boundingClientRect.top - b.boundingClientRect.top)
         if(intersectingEntries.length > 0){
             const activeSection = intersectingEntries[0].target.id;
-            console.log(activeSection);
+            // console.log(activeSection);
             setScrollSPy(activeSection);
         }
     }
@@ -54,47 +65,47 @@ export default function App(){
         return () => observer.disconnect();
     },[]);
 
-    function catchPokemon(newPokemon){
+    const catchPokemon = async (newPokemon) => {
         console.log('Catching Pokémon');
-        const newId = Math.max(...pokedex.map(pokemon => pokemon.id)) + 1;
-        setPokedex(currentData => {
-            return([...currentData,{id:newId,...newPokemon}])
+        await fetch('http://localhost:5000/api/pokemon', {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(newPokemon)
         });
+        getPokemon();
     }
 
     function setSelectedPokemon(currentPokemonId){
         setSelectedPokemonId(currentPokemonId);
     }
 
-    function releasePokemon(releasingPokemonId){
-        setPokedex(currentData => currentData.filter(pokemon => pokemon.id !== releasingPokemonId));
+    const releasePokemon = async (releasingPokemonId) => {
+        await fetch(`http://localhost:5000/api/pokemon/${releasingPokemonId}`, {
+            method: 'DELETE'
+        })
+        getPokemon();
     }
 
-    function evolvePokemon(updatedPokemon){
-        setPokedex(currentData => currentData.map(pokemon => {
-            if(pokemon.id === selectedPokemonId){
-                return({
-                    id:pokemon.id,
-                    ...updatedPokemon
-                })
-            }else{
-                return pokemon;
-            }
-        }));
+    const evolvePokemon = async (updatedPokemon) => {
+
+        await fetch(`http://localhost:5000/api/pokemon/${selectedPokemonId}`, {
+            method: 'PUT',
+            headers: {
+               'Content-Type':'application/json'
+            },
+            body: JSON.stringify(updatedPokemon) 
+        });
         setSelectedPokemonId(null);
+        getPokemon();
     }
 
-    function trainPokemon(trainedPokemonId){
-        setPokedex(currentData => currentData.map(pokemon => {
-            if(pokemon.id === trainedPokemonId){
-                return({
-                    ...pokemon,
-                    level: pokemon.level + 33 >= 100? 100: pokemon.level + 33
-                })
-            }else{
-                return pokemon;
-            }
-        }))
+    const trainPokemon = async (trainedPokemonId) => {
+        await fetch(`http://localhost:5000/api/pokemon/train/${trainedPokemonId}`, {
+            method:'PUT'
+        });
+        getPokemon();
     }
 
     function cancelEditing(){
@@ -172,7 +183,10 @@ export default function App(){
                     <p className="reg-p">Managing this roster requires careful balance and tough choices, Ash. You must select a diverse mix of types, like pairing Pikachu’s electricity with a Water-type and a Flying-type, so you are never left helpless against a type disadvantage. Any extra Pokémon you catch beyond your active six are automatically transferred to my lab's storage system, waiting safely until you visit a Pokémon Center to swap them into your roster.</p>
                     <div className="pokemon-roster">
                         {
-                            filteredData.map((pokemon,index)=> <PokemonCard onCancelEditing = {cancelEditing} onSetSelectedPokemon={setSelectedPokemon} onReleasePokemon={releasePokemon} onEvolvePokemon={evolvePokemon} onTrainingPokemon={trainPokemon} key={pokemon.id} sNo={index+1} {...pokemon} selectedPokemonId={selectedPokemonId}/>)
+                            filteredData.map(
+                                (pokemon, index) =>
+                                    <PokemonCard onCancelEditing={cancelEditing} onSetSelectedPokemon={setSelectedPokemon} onReleasePokemon={releasePokemon} onEvolvePokemon={evolvePokemon} onTrainingPokemon={trainPokemon} key={pokemon._id} sNo={index + 1} {...pokemon} selectedPokemonId={selectedPokemonId} />
+                            )
                         }
                     </div>
                 </div>

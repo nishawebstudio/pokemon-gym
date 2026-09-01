@@ -1,6 +1,7 @@
 import EvolvePokemon from "./EvolvePokemon";
-export default function PokemonCard({sNo, id, name, level, type,evolution,onSetSelectedPokemon,onReleasePokemon,onEvolvePokemon,onTrainingPokemon, selectedPokemonId, onCancelEditing}){
+export default function PokemonCard({sNo, _id, name, level, type,evolution,onSetSelectedPokemon,onReleasePokemon,onEvolvePokemon,onTrainingPokemon, selectedPokemonId, onCancelEditing}){
 
+    // console.log(_id);
     const myNameIs = evolution.includes(name)
         ? level >= 100
             ? evolution[evolution.length - 1]
@@ -21,11 +22,11 @@ export default function PokemonCard({sNo, id, name, level, type,evolution,onSetS
                     <p className='pokemon-type'>{type.join(', ')}</p>
                 </div>
             </div>
-            {selectedPokemonId === id && <EvolvePokemon name={myNameIs} level={level} type={type} evolution={evolution} onEvolvePokemon={onEvolvePokemon} onCancelEditing={onCancelEditing}/>}
+            {selectedPokemonId === _id && <EvolvePokemon name={myNameIs} level={level} type={type} evolution={evolution} onEvolvePokemon={onEvolvePokemon} onCancelEditing={onCancelEditing}/>}
             <div className="btn-group">
-                <button className="btn bg-orange" onClick={()=>onSetSelectedPokemon(id)}>Edit</button>
-                <button className={level >= 100?"btn bg-green disabled":"btn bg-green"} onClick={()=>onTrainingPokemon(id)} disabled = {level >= 100?true:false}>{level >= 100?"Fully Trained":"Train"}</button>
-                <button className="btn bg-red" onClick={()=>onReleasePokemon(id)}>Release</button>
+                <button className="btn bg-orange" onClick={()=>onSetSelectedPokemon(_id)}>Edit</button>
+                <button className={level >= 100?"btn bg-green disabled":"btn bg-green"} onClick={()=>onTrainingPokemon(_id)} disabled = {level >= 100?true:false}>{level >= 100?"Fully Trained":"Train"}</button>
+                <button className="btn bg-red" onClick={()=>onReleasePokemon(_id)}>Release</button>
             </div>
         </div>
         // console.log(evolutionNames)

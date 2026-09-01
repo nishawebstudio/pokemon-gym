@@ -23,9 +23,7 @@ export default function CatchPokemon({onCatchPokemon}){
     return (
         <>
             <h2>Catch Pokémon</h2>
-            <p className='reg-p'>If you want to become a Pokémon Master, you cannot just throw Poké Balls blindly like you did with that Spearow. First, you must find a wild Pokémon in the tall grass or forests and use your partner, Pikachu, to weaken it in battle. Use precise attacks to tire the wild Pokémon out, but be careful not to let it faint, or the opportunity is lost.</p>
-            <p className='reg-p'>Once your target is weak and low on energy, take steady aim and toss your Poké Ball directly at it. Watch the ball closely as it wiggles on the ground, and wait patiently for the center light to click and seal the capture.</p>
-            <p className='reg-p'>Most importantly, a true Trainer focuses on friendship rather than just force. The moment your new companion emerges from the ball, show it immediate respect and kindness to begin building a lifelong bond.</p>
+            <p className='reg-p'>Find a wild Pokémon, weaken it with Pikachu without knocking it out, then aim and throw your Poké Ball. Once captured, treat your new companion with kindness and respect.</p>
             <form onSubmit={handleSubmission}>
                 <input value={name} type="text" onChange={(event)=>setName(event.target.value )} placeholder='Pokémon Name'/>
                 <input value={level} type="number" onChange={(event)=>setLevel(event.target.value )} placeholder='Pokémon Level'/>

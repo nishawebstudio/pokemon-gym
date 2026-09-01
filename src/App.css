@@ -175,9 +175,12 @@ form {
     margin-bottom: 1rem;
     font-size: 1.8rem;
 }
+.flex-container{
+    display: flex;
+    gap: 1rem;
+}
 section {
-    min-height: 100vh;
-    padding: 80px 0;
+    padding: 2rem;
     display: flex;
     align-items: center;
 }
@@ -189,8 +192,13 @@ section {
     justify-content: space-between;
     gap: 1rem;
 }
-#catch{
-    padding:1rem;
+#catch, #filter{
+    padding:2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1.5rem 0;
+    flex: auto;
 }
 #filter{
     background-color: var(--blue-opacity);

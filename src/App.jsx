@@ -8,9 +8,7 @@ import FilterPokemon from './components/FilterPokemon';
 import Navbar from './components/Navbar';
 
 export default function App(){
-    // const [pokedex,setPokedex] = useState(()=>{
-    //     return JSON.parse(localStorage.getItem('pokedex')) || pokemonData;
-    // });
+
     const [pokedex, setPokedex] = useState([]);
     const [appSearchTerm, setAppSearchTerm] = useState("");
     const [appSortOption,setAppSortOption] = useState("asc-name");
@@ -24,19 +22,13 @@ export default function App(){
     const getPokemon = async () => {
         const response = await fetch('http://localhost:5000/api/pokemon');
         const data = await response.json();
-        // console.log(data);
         setPokedex(data);
     }
 
     useEffect(() => {
         getPokemon();
     },[]);
-    useEffect(() => 
-        {
-            localStorage.setItem('pokedex',JSON.stringify(pokedex));
-            // console.log(`Effect ran`);
-        },[pokedex]
-    );
+
     useEffect(() => {
         if(selectedPokemonId != null){
             const currentPokemonEditing = pokedex.find(pokemon => pokemon._id === selectedPokemonId)
@@ -45,25 +37,23 @@ export default function App(){
         return (()=>document.title = `Ash's Pokémon Gym`);
     },[selectedPokemonId]);
     
-    function getId(entries) {
-        // console.log(entries);
-        const intersectingEntries = entries.filter(entry => entry.isIntersecting).toSorted((a,b)=>a.boundingClientRect.top - b.boundingClientRect.top)
-        if(intersectingEntries.length > 0){
-            const activeSection = intersectingEntries[0].target.id;
-            // console.log(activeSection);
-            setScrollSPy(activeSection);
-        }
-    }
-    useEffect(()=>{
-        const observer = new IntersectionObserver(getId, {
-            threshold: 0.5
-        });
-        observer.observe(document.querySelector('#catch'));
-        observer.observe(document.querySelector('#filter'));
-        observer.observe(document.querySelector('#roster'));
+    // function getId(entries) {
+    //     const intersectingEntries = entries.filter(entry => entry.isIntersecting).toSorted((a,b)=>a.boundingClientRect.top - b.boundingClientRect.top)
+    //     if(intersectingEntries.length > 0){
+    //         const activeSection = intersectingEntries[0].target.id;
+    //         setScrollSPy(activeSection);
+    //     }
+    // }
+    // useEffect(()=>{
+    //     const observer = new IntersectionObserver(getId, {
+    //         threshold: 0.5
+    //     });
+    //     observer.observe(document.querySelector('#catch'));
+    //     observer.observe(document.querySelector('#filter'));
+    //     observer.observe(document.querySelector('#roster'));
 
-        return () => observer.disconnect();
-    },[]);
+    //     return () => observer.disconnect();
+    // },[]);
 
     const catchPokemon = async (newPokemon) => {
         console.log('Catching Pokémon');
@@ -133,7 +123,7 @@ export default function App(){
 
     return (
         <>
-            <Navbar activeSection={scrollSpy}/>
+            <Navbar/>
             <header className='header'>
                 <div className="pokemon-gym">
                     <h1>Ash's Pokémon GYM</h1>
@@ -165,22 +155,20 @@ export default function App(){
                     </div>
                 </div>
             </header>
-
-            <section id="catch">
-                <div className="pokemon-gym">
-                    <CatchPokemon onCatchPokemon={catchPokemon}/>      
-                </div>    
-            </section>
-            <section id="filter">
-                <div className="pokemon-gym">
-                    <FilterPokemon onFilteringPokemon = {filterPokemon}/> 
-                </div>    
+            <section className="pokemon-gym">
+                <div className="flex-container">
+                    <div id="catch">
+                        <CatchPokemon onCatchPokemon={catchPokemon}/>      
+                    </div>    
+                    <div id="filter">
+                        <FilterPokemon onFilteringPokemon = {filterPokemon}/> 
+                    </div>    
+                </div>
             </section>
             <section id="roster">
                 <div className="pokemon-gym">
                     <h2>Pokémon Roster</h2>
-                    <p className="reg-p">Listen, Ash, a Trainer is only as ready as their Pokémon Roster. Your roster is the active team of up to six Pokémon that you carry with you on your belt at all times. These are the only partners you can call upon instantly for a surprise rival challenge or a formal Gym battle, making your roster the core strategy of your entire journey.</p>
-                    <p className="reg-p">Managing this roster requires careful balance and tough choices, Ash. You must select a diverse mix of types, like pairing Pikachu’s electricity with a Water-type and a Flying-type, so you are never left helpless against a type disadvantage. Any extra Pokémon you catch beyond your active six are automatically transferred to my lab's storage system, waiting safely until you visit a Pokémon Center to swap them into your roster.</p>
+                    <p className="reg-p">Your active Pokémon Roster holds up to six Pokémon and forms the core of your battle strategy. Choose a balanced mix of types, while extra Pokémon are safely stored at the lab until you swap them into your roster.</p>
                     <div className="pokemon-roster">
                         {
                             filteredData.map(

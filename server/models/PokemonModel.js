@@ -13,6 +13,9 @@ const PokemonSchema = mongoose.Schema({
     },
     evolution: {
         type: [String]
+    },
+    region:{
+        type: String
     }
 });
 

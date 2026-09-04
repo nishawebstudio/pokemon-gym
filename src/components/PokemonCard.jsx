@@ -1,5 +1,5 @@
 import EvolvePokemon from "./EvolvePokemon";
-export default function PokemonCard({sNo, _id, name, level, type,evolution,onSetSelectedPokemon,onReleasePokemon,onEvolvePokemon,onTrainingPokemon, selectedPokemonId, onCancelEditing}){
+export default function PokemonCard({sNo, _id, name, level, type,evolution, region,onSetSelectedPokemon,onReleasePokemon,onEvolvePokemon,onTrainingPokemon, selectedPokemonId, onCancelEditing}){
 
     // console.log(_id);
     const myNameIs = evolution.includes(name)
@@ -21,8 +21,12 @@ export default function PokemonCard({sNo, _id, name, level, type,evolution,onSet
                     <p className='stat-name'>Type:</p>
                     <p className='pokemon-type'>{type.join(', ')}</p>
                 </div>
+                <div className='pokemon-stat-container'>
+                    <p className='stat-name'>Region:</p>
+                    <p className='pokemon-type'>{region}</p>
+                </div>
             </div>
-            {selectedPokemonId === _id && <EvolvePokemon name={myNameIs} level={level} type={type} evolution={evolution} onEvolvePokemon={onEvolvePokemon} onCancelEditing={onCancelEditing}/>}
+            {selectedPokemonId === _id && <EvolvePokemon name={myNameIs} level={level} type={type} evolution={evolution} region={region} onEvolvePokemon={onEvolvePokemon} onCancelEditing={onCancelEditing}/>}
             <div className="btn-group">
                 <button className="btn bg-orange" onClick={()=>onSetSelectedPokemon(_id)}>Edit</button>
                 <button className={level >= 100?"btn bg-green disabled":"btn bg-green"} onClick={()=>onTrainingPokemon(_id)} disabled = {level >= 100?true:false}>{level >= 100?"Fully Trained":"Train"}</button>

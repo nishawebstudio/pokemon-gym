@@ -1,7 +1,5 @@
 import './App.css';
-import pokemonData from './data/pokemonData';
-import {useState , useEffect} from 'react';
-
+import {useState , useEffect, useRef} from 'react';
 import PokemonCard from './components/PokemonCard';
 import CatchPokemon from './components/CatchPokemon';
 import FilterPokemon from './components/FilterPokemon';
@@ -12,8 +10,9 @@ export default function App(){
     const [pokedex, setPokedex] = useState([]);
     const [appSearchTerm, setAppSearchTerm] = useState("");
     const [appSortOption,setAppSortOption] = useState("asc-name");
+    const [appFilterRegion,setAppFilterRegion] = useState("asc-name");
     const [selectedPokemonId,setSelectedPokemonId] = useState(null);
-    const [scrollSpy,setScrollSPy] = useState("catch");
+    const searchFocus = useRef(null);
 
     const pokemonRoster = pokedex.length;
     const pokemonTrained = pokedex.filter(pokemon => pokemon.level === 100).length;
@@ -22,38 +21,27 @@ export default function App(){
     const getPokemon = async () => {
         const response = await fetch('http://localhost:5000/api/pokemon');
         const data = await response.json();
-        setPokedex(data);
+        return data;
     }
+    const refreshPokemon = async () => {const data = await getPokemon();setPokedex(data)};
 
     useEffect(() => {
-        getPokemon();
+        const loadPokemon = async () =>{
+            const data = await getPokemon();
+            setPokedex(data);
+        }
+        loadPokemon();
     },[]);
 
     useEffect(() => {
         if(selectedPokemonId != null){
             const currentPokemonEditing = pokedex.find(pokemon => pokemon._id === selectedPokemonId)
-            document.title = `Editing Pokémon ${currentPokemonEditing.name}`;
+            if(currentPokemonEditing){
+                document.title = `Editing Pokémon ${currentPokemonEditing.name}`;
+            }
         }
         return (()=>document.title = `Ash's Pokémon Gym`);
-    },[selectedPokemonId]);
-    
-    // function getId(entries) {
-    //     const intersectingEntries = entries.filter(entry => entry.isIntersecting).toSorted((a,b)=>a.boundingClientRect.top - b.boundingClientRect.top)
-    //     if(intersectingEntries.length > 0){
-    //         const activeSection = intersectingEntries[0].target.id;
-    //         setScrollSPy(activeSection);
-    //     }
-    // }
-    // useEffect(()=>{
-    //     const observer = new IntersectionObserver(getId, {
-    //         threshold: 0.5
-    //     });
-    //     observer.observe(document.querySelector('#catch'));
-    //     observer.observe(document.querySelector('#filter'));
-    //     observer.observe(document.querySelector('#roster'));
-
-    //     return () => observer.disconnect();
-    // },[]);
+    },[selectedPokemonId,pokedex]);
 
     const catchPokemon = async (newPokemon) => {
         console.log('Catching Pokémon');
@@ -64,7 +52,7 @@ export default function App(){
             },
             body: JSON.stringify(newPokemon)
         });
-        getPokemon();
+        await refreshPokemon();
     }
 
     function setSelectedPokemon(currentPokemonId){
@@ -75,7 +63,7 @@ export default function App(){
         await fetch(`http://localhost:5000/api/pokemon/${releasingPokemonId}`, {
             method: 'DELETE'
         })
-        getPokemon();
+        await refreshPokemon();
     }
 
     const evolvePokemon = async (updatedPokemon) => {
@@ -88,14 +76,14 @@ export default function App(){
             body: JSON.stringify(updatedPokemon) 
         });
         setSelectedPokemonId(null);
-        getPokemon();
+        await refreshPokemon();
     }
 
     const trainPokemon = async (trainedPokemonId) => {
         await fetch(`http://localhost:5000/api/pokemon/train/${trainedPokemonId}`, {
             method:'PUT'
         });
-        getPokemon();
+        await refreshPokemon();
     }
 
     function cancelEditing(){
@@ -103,13 +91,14 @@ export default function App(){
     }
 
 
-    function filterPokemon(searchTerm,sortOption){
-         console.log(`Search Term ${searchTerm} and Sort Option ${sortOption}`);
+    function filterPokemon(searchTerm,sortOption,region){
+         console.log(`Search Term ${searchTerm} and Sort Option ${sortOption} and Sort Option ${region}`);
          setAppSearchTerm(searchTerm.toLowerCase());
          setAppSortOption(sortOption);
+         setAppFilterRegion(region);
     }
 
-    const filteredData = pokedex.filter(pokemon => pokemon.name.toLowerCase().includes(appSearchTerm)).toSorted((a,b)=>{
+    const filteredData = pokedex.filter(pokemon => {if(pokemon.name.toLowerCase().includes(appSearchTerm))}).toSorted((a,b)=>{
             if(appSortOption === 'asc-level'){
                 return a.level - b.level;
             }else if(appSortOption === 'desc-level'){
@@ -161,7 +150,7 @@ export default function App(){
                         <CatchPokemon onCatchPokemon={catchPokemon}/>      
                     </div>    
                     <div id="filter">
-                        <FilterPokemon onFilteringPokemon = {filterPokemon}/> 
+                        <FilterPokemon onFilteringPokemon = {filterPokemon} ref={searchFocus}/> 
                     </div>    
                 </div>
             </section>
@@ -177,6 +166,7 @@ export default function App(){
                             )
                         }
                     </div>
+                    <input type="button" value="Go to Search" onClick={()=>searchFocus.current.focus()}/>
                 </div>
             </section>
 

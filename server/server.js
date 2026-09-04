@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import express from 'express';
-import pokemonData from '../src/data/pokemonData.js';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
